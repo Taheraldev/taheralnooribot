@@ -4,25 +4,19 @@ import weasyprint
 import urllib.request
 from presets import Presets
 from bs4 import BeautifulSoup
-from pyrogram import Client, filters
+from fpdf import FPDF
+from pdf import PROCESS
+from pyrogram import filters
+from Configs.dm import Config
+from pyrogram import Client as ILovePDF
+from pyrogram.types import InlineKeyboardButton
+from pyrogram.types import InlineKeyboardMarkup
 from pyrogram.types import Message, InlineKeyboardMarkup, InlineKeyboardButton, CallbackQuery
 
 
-if bool(os.environ.get("ENV", False)):
-    from sample_config import Config
-else:
-    from config import Config
-
-# -------------------------- Bot Configuration ---------------------------------------------- #
-bot = Client(
-    "ILovePDF",
-    bot_token=Config.TG_BOT_TOKEN,
-    api_id=Config.APP_ID,
-    api_hash=Config.API_HASH,
-)
 
 # -------------------------------- Main execution fn --------------------------------------- #
-@bot.on_message(filters.private & filters.text)
+@ILovePDF.on_message(filters.private & filters.text & ~filters.command(["start"]))
 async def link_extract(self, m: Message):
     if not m.text.startswith("http"):
         return
@@ -71,4 +65,4 @@ async def link_extract(self, m: Message):
         pass
     await msg.delete()
 print(f"\n\nبدأ البوت بنجاح!\n\n")
-bot.run()
+
